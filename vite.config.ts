@@ -8,6 +8,10 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    // Polyfill process.env for the browser
+    'process.env': {}
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, './'),
