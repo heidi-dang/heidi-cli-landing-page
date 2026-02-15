@@ -1,0 +1,5 @@
+{
+  "name": "Heidi CLI - Web Platform",
+  "description": "The official web platform for Heidi CLI, a Python-native, terminal-safe AI companion for developers. Features intelligent docs, dashboard, and cloud sync.",
+  "requestFramePermissions": []
+}
