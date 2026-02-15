@@ -6,9 +6,9 @@ import { ChatMessage } from "../types";
 // For this environment, we assume process.env.API_KEY is available.
 const apiKey = process.env.API_KEY || ''; 
 
-// We use the 'gemini-3-flash-preview' as it is the current recommended model for high-speed text tasks
-// consistent with the system prompt's fallback for text tasks.
-const MODEL_NAME = 'gemini-3-flash-preview';
+// Models
+const FLASH_MODEL = 'gemini-3-flash-preview';
+const PRO_THINKING_MODEL = 'gemini-3-pro-preview';
 
 let ai: GoogleGenAI | null = null;
 
@@ -19,32 +19,46 @@ const getAiClient = () => {
   return ai;
 };
 
+export interface GeminiOptions {
+  useThinking?: boolean;
+}
+
 export const streamGeminiResponse = async (
   history: ChatMessage[], 
   newMessage: string,
-  onChunk: (text: string) => void
+  onChunk: (text: string) => void,
+  options: GeminiOptions = {}
 ): Promise<string> => {
   const client = getAiClient();
   if (!client) {
     throw new Error("Gemini API Key is missing. Please configure your environment.");
   }
 
+  // Select model based on thinking mode
+  const model = options.useThinking ? PRO_THINKING_MODEL : FLASH_MODEL;
+
   const systemInstruction = `You are Heidi, an intelligent CLI assistant. 
   You are helpful, concise, and technical. 
   You help users with terminal commands, coding questions, and specifically 'heidi-cli' usage.
   Keep responses formatted in Markdown. Use code blocks for commands.`;
 
-  // Convert history to Gemini format if using chat.sendMessageStream directly with history
-  // However, for simplicity and statelessness in this demo service, we'll append history to the prompt 
-  // or use the Chat API. Let's use the Chat API properly.
+  const config: any = {
+    systemInstruction,
+  };
+
+  if (options.useThinking) {
+    // Configure thinking budget for complex reasoning tasks
+    // We do NOT set maxOutputTokens when using thinkingConfig
+    config.thinkingConfig = { thinkingBudget: 32768 };
+  } else {
+    // Standard fast configuration for Flash
+    config.temperature = 0.7;
+  }
 
   try {
     const chat = client.chats.create({
-      model: MODEL_NAME,
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-      },
+      model: model,
+      config: config,
       history: history.map(msg => ({
         role: msg.role,
         parts: [{ text: msg.content }]

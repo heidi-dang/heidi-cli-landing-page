@@ -74,13 +74,21 @@ const App: React.FC = () => {
         <ChatWidget />
         
         {/* Simple Footer */}
-        <footer className="bg-black/30 border-t border-white/5 py-8 mt-auto">
+        <footer className="bg-dark-footer border-t border-white/5 py-8 mt-auto">
           <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>&copy; {new Date().getFullYear()} Heidi CLI. Open source MIT License.</p>
-            <div className="mt-2 space-x-4">
+            <p className="mb-4">&copy; {new Date().getFullYear()} Heidi CLI. Open source MIT License.</p>
+            <div className="flex justify-center items-center space-x-6">
               <a href="#" className="hover:text-heidi-400 transition-colors">Privacy</a>
               <a href="#" className="hover:text-heidi-400 transition-colors">Terms</a>
-              <a href="https://github.com/heidi-dang/heidi-cli" className="hover:text-heidi-400 transition-colors">GitHub</a>
+              <div className="h-4 w-px bg-white/10"></div>
+              <a 
+                href="https://github.com/heidi-dang/heidi-cli" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-heidi-400 transition-colors flex items-center gap-2"
+              >
+                <i className="fab fa-github"></i> GitHub
+              </a>
             </div>
           </div>
         </footer>
