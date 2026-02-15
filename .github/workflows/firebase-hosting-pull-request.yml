@@ -12,17 +12,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          submodules: recursive
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: heidi-cli-landing-page/package-lock.json
 
       - name: Install dependencies
+        working-directory: heidi-cli-landing-page
         run: npm ci
 
       - name: Build
+        working-directory: heidi-cli-landing-page
         run: npm run build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -30,5 +34,6 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HEIDI_CLI }}
           projectId: heidi-cli
+          entryPoint: heidi-cli-landing-page
         env:
           FIREBASE_PROJECT_ID: heidi-cli
