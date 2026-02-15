@@ -4,7 +4,15 @@ import { ChatMessage } from "../types";
 // Initialize Gemini Client
 // Note: In a real production app, ensure your API key is secure.
 // For this environment, we assume process.env.API_KEY is available.
-const apiKey = process.env.API_KEY || ''; 
+// Safely access process.env
+const getEnvVar = (key: string) => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return '';
+};
+
+const apiKey = getEnvVar('API_KEY');
 
 // Models
 const FLASH_MODEL = 'gemini-3-flash-preview';

@@ -2,15 +2,23 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// Helper to safely get env vars
+const getEnvVar = (key: string) => {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env[key];
+  }
+  return undefined;
+};
+
 // TODO: Replace with your actual Firebase config
 // If these are missing, the app will fall back to a "Demo Mode" using localStorage
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  apiKey: getEnvVar('REACT_APP_FIREBASE_API_KEY'),
+  authDomain: getEnvVar('REACT_APP_FIREBASE_AUTH_DOMAIN'),
+  projectId: getEnvVar('REACT_APP_FIREBASE_PROJECT_ID'),
+  storageBucket: getEnvVar('REACT_APP_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: getEnvVar('REACT_APP_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: getEnvVar('REACT_APP_FIREBASE_APP_ID')
 };
 
 // Check if config is present
@@ -21,10 +29,14 @@ let db: any;
 let googleProvider: any;
 
 if (isConfigured) {
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  googleProvider = new GoogleAuthProvider();
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    googleProvider = new GoogleAuthProvider();
+  } catch (e) {
+    console.warn("Firebase initialization failed, falling back to mock mode", e);
+  }
 }
 
 // Mock Auth implementation for demo purposes when no Firebase keys are present
@@ -54,6 +66,8 @@ export const loginWithGoogle = async (): Promise<User | { uid: string, email: st
       phoneNumber: null
     };
     localStorage.setItem("heidi_demo_user", JSON.stringify(mockUser));
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
     return mockUser;
   }
 };
