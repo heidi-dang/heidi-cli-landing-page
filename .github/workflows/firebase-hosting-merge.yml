@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -18,11 +16,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        working-directory: heidi-cli-landing-page
         run: npm ci
 
       - name: Build
-        working-directory: heidi-cli-landing-page
         run: npm run build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -31,6 +27,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HEIDI_CLI }}
           channelId: live
           projectId: heidi-cli
-          entryPoint: heidi-cli-landing-page
         env:
           FIREBASE_PROJECT_ID: heidi-cli
