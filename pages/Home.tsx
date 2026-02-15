@@ -124,12 +124,10 @@ const Home: React.FC = () => {
                 >
                   <i className="fab fa-github mr-2 text-xl group-hover:text-heidi-400 transition-colors"></i> View Source
                 </a>
-                <a
-                  href="#"
-                  className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
-                >
-                  Read Documentation &rarr;
-                </a>
+                <div className="flex items-center gap-2 group cursor-not-allowed select-none px-2">
+                  <span className="text-sm text-gray-500 group-hover:text-gray-400 transition-colors">Read Documentation</span>
+                  <span className="text-[10px] font-bold bg-heidi-500/10 text-heidi-400 px-2 py-0.5 rounded-full border border-heidi-500/20">COMING SOON</span>
+                </div>
               </div>
               
               <div className="mt-8 lg:mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-4 lg:gap-6 text-gray-500 text-sm">

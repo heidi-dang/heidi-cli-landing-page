@@ -32,8 +32,9 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
             <p className="text-gray-400 mt-2">Here's what's happening with your Heidi instances.</p>
           </div>
           <div className="flex space-x-3">
-            <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center">
-              <i className="fas fa-cog mr-2 text-gray-400"></i> Settings
+            <button className="bg-white/5 border border-white/10 text-gray-500 px-5 py-2.5 rounded-xl text-sm font-medium flex items-center cursor-not-allowed opacity-70">
+              <i className="fas fa-cog mr-2"></i> Settings
+              <span className="ml-2 text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-gray-400">SOON</span>
             </button>
             <button className="bg-heidi-600 hover:bg-heidi-500 text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-lg shadow-heidi-500/20 transition-all hover:-translate-y-0.5 flex items-center">
               <i className="fas fa-download mr-2"></i> Update CLI
